@@ -1,3 +1,5 @@
+import datetime
+
 from fastapi import HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
 
@@ -34,3 +36,10 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 def users(db: Session = Depends(get_db)):
     db_user = db.query(models.User).all()
     return db_user
+
+
+
+@router.on_event('startup')
+def change():
+    with open('logs.log', 'a') as log:
+        log.write(f'Starting Server {datetime.datetime.now()} \n')
